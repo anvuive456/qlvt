@@ -1,44 +1,81 @@
 import { ColumnDef } from '@tanstack/table-core';
-
-export type Room = {
-  id: number;
-  name: string;
-  status: string;
-}
-
-export const mockRooms: Room[] = [
-  { id: 1, name: 'Phòng họp A', status: 'đang trống' },
-  { id: 2, name: 'Phòng họp B', status: 'đã được đặt' },
-  { id: 3, name: 'Phòng làm việc 1', status: 'đang trống' },
-  { id: 4, name: 'Phòng làm việc 2', status: 'đã được đặt' },
-  { id: 5, name: 'Phòng hội thảo', status: 'đang trống' },
-  { id: 6, name: 'Phòng tiếp khách', status: 'đã được đặt' },
-  { id: 7, name: 'Phòng quản lý', status: 'đang trống' },
-  { id: 8, name: 'Phòng lưu trữ', status: 'đã được đặt' },
-  { id: 9, name: 'Phòng đào tạo', status: 'đang trống' },
-  { id: 10, name: 'Phòng nghiên cứu', status: 'đã được đặt' },
-  { id: 11, name: 'Phòng thư giãn', status: 'đang trống' },
-  { id: 12, name: 'Phòng IT', status: 'đã được đặt' },
-  { id: 13, name: 'Phòng kế toán', status: 'đang trống' },
-  { id: 14, name: 'Phòng nhân sự', status: 'đã được đặt' },
-  { id: 15, name: 'Phòng họp nhỏ', status: 'đang trống' },
-  { id: 16, name: 'Phòng giám đốc', status: 'đã được đặt' },
-  { id: 17, name: 'Phòng thư ký', status: 'đang trống' },
-  { id: 18, name: 'Phòng sáng tạo', status: 'đã được đặt' },
-  { id: 19, name: 'Phòng truyền thông', status: 'đang trống' },
-  { id: 20, name: 'Phòng dự án', status: 'đã được đặt' },
-];
+import { RoomCondition, RoomResponse, RoomStatus } from '@/model/payload/room-payload';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { MoreHorizontal } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 
-export const columns: ColumnDef<Room>[] = [
+export const columns = ({
+                          onDetail,
+                          onDelete,
+                        }: {
+  onDetail: (id: number) => void,
+  onDelete: (id: number) => void,
+}): ColumnDef<RoomResponse>[] => [
   {
     accessorKey: 'id',
 
   }, {
-    accessorKey: 'name',
+    accessorKey: 'tenPhongHop',
     header: 'Tên',
-  }, {
-    accessorKey: 'status',
+  },
+  {
+    accessorKey: 'trangThai',
     header: 'Trạng thái',
+    cell: ({ row }) => {
+      const origin = row.original;
+      let r = '';
+      if (origin.trangThai == RoomStatus.AVAILABLE) {
+        r = 'Đang trống';
+      } else {
+        r = 'Đang được mượn';
+      }
+      return <Badge variant={origin.trangThai == RoomStatus.AVAILABLE ? 'default' : 'outline'}>{r}</Badge>;
+    },
+  },
+  {
+    accessorKey: 'tinhTrang',
+    header: 'Tình trạng',
+    cell: ({ row }) => {
+      const origin = row.original;
+      let r = '';
+      if (origin.tinhTrang == RoomCondition.MAINTAINING) {
+        r = 'Đang bảo trì';
+      } else {
+        r = 'Hoạt động tốt';
+      }
+      return <Badge variant={origin.tinhTrang == RoomCondition.MAINTAINING ? 'outline' : 'default'}>{r}</Badge>;
+    },
+  },
+  {
+    id: 'actions',
+    cell: ({ row }) => {
+      const room = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Mở menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={event => onDetail(room.id)}>
+              Xem chi tiết
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={event => onDelete(room.id)}>
+              Xoá
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
   },
 ];

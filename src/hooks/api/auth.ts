@@ -48,7 +48,7 @@ export const authApi = createApi({
           }));
         },
       }),
-      me: build.query<User, {}>({
+      me: build.query<User, void>({
         query: () => '/me',
         transformResponse: ({ data }: { data: MeResponse }) => {
           return {

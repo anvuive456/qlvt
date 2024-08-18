@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { PagablePayload } from '@/model/payload/pagable-payload';
 import { DepartmentRequest, DepartmentResponse } from '@/model/payload/department-payload';
+import build from 'next/dist/build';
 
 
 export const departmentApi = createApi({
@@ -12,12 +13,22 @@ export const departmentApi = createApi({
   tagTypes: ['DEPARTMENTS'],
   endpoints(build) {
     return {
-      getAllDepartments: build.query<DepartmentResponse[], {}>({
+      getAllDepartments: build.query<DepartmentResponse[], void>({
         query: arg => {
           return {
             url: '',
             method: 'GET',
           };
+        },
+      }),
+      getDetailDepartment: build.query<DepartmentResponse, { id: string }>({
+        query: arg => {
+          return {
+            url: `/${arg.id}`,
+          };
+        },
+        transformResponse: (value: { data: DepartmentResponse }) => {
+          return value.data;
         },
       }),
       updateDepartment: build.mutation<DepartmentResponse, DepartmentRequest & { id: number }>({
@@ -28,14 +39,16 @@ export const departmentApi = createApi({
             method: 'PUT',
           };
         },
+        invalidatesTags: ['DEPARTMENTS'],
       }),
-      deleteDepartment: build.mutation<{}, { id: number }>({
+      deleteDepartment: build.mutation<void, { id: number }>({
         query: arg => {
           return {
             url: `/${arg.id}`,
             method: 'DELETE',
           };
         },
+        invalidatesTags: ['DEPARTMENTS'],
       }),
       createDepartment: build.mutation<DepartmentResponse, DepartmentRequest>({
         query: arg => {
@@ -45,7 +58,7 @@ export const departmentApi = createApi({
             body: arg,
           };
         },
-        invalidatesTags:['DEPARTMENTS']
+        invalidatesTags: ['DEPARTMENTS'],
       }),
       searchDepartments: build.query<PagablePayload<DepartmentResponse>, {
         tenPhongBan?: string;
@@ -56,7 +69,7 @@ export const departmentApi = createApi({
           method: 'GET',
           url: `/search?page=${arg.page}&size=${arg.size}&tenPhongBan=${arg.tenPhongBan || ''}`,
         }),
-        providesTags:['DEPARTMENTS']
+        providesTags: ['DEPARTMENTS'],
       }),
     };
   },
@@ -64,6 +77,7 @@ export const departmentApi = createApi({
 
 export const {
   useSearchDepartmentsQuery,
+  useGetDetailDepartmentQuery,
   useGetAllDepartmentsQuery,
   useDeleteDepartmentMutation,
   useCreateDepartmentMutation,

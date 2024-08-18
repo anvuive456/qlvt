@@ -3,6 +3,7 @@ import { authApi } from '@/hooks/api/auth';
 import { userApi } from '@/hooks/api/user';
 import authReducer from '@/hooks/reducer/auth-reducer';
 import { departmentApi } from '@/hooks/api/department';
+import { roomApi } from '@/hooks/api/room';
 
 export const makeStore = () => {
   return configureStore({
@@ -10,10 +11,16 @@ export const makeStore = () => {
       [userApi.reducerPath]: userApi.reducer,
       [authApi.reducerPath]: authApi.reducer,
       [departmentApi.reducerPath]: departmentApi.reducer,
+      [roomApi.reducerPath]: roomApi.reducer,
       auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat([authApi.middleware, userApi.middleware, departmentApi.middleware]),
+      getDefaultMiddleware().concat([
+        authApi.middleware,
+        userApi.middleware,
+        departmentApi.middleware,
+        roomApi.middleware,
+      ]),
   });
 };
 

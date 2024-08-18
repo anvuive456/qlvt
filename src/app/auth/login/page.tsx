@@ -22,7 +22,7 @@ const LoginSchema = z.object({
 
 export default function LoginPage() {
   const [signIn, result] = useSignInMutation();
-  const me = useMeQuery({});
+  const me = useMeQuery();
   const router = useRouter();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),

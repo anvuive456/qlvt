@@ -1,4 +1,5 @@
 import { Gender } from '@/model/gender';
+import { DepartmentResponse } from '@/model/payload/department-payload';
 
 export interface SignUpRequest {
   username: string;
@@ -36,7 +37,7 @@ export interface MeResponse {
   gioiTinh: string;
   image: string;
   ghiChu: string;
-  phongBan: string;
+  phongBan: DepartmentResponse | null;
   roles: { id: string; ten: string; }[];
 
 }

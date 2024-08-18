@@ -25,7 +25,7 @@ export default function RootLayout({
         </main>
       </StoreProvider>
 
-      <Toaster duration={500} position={'top-right'} />
+      <Toaster duration={2000} position={'top-right'} />
 
       </body>
       </html>

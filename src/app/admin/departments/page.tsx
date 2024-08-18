@@ -4,12 +4,22 @@ import { useEffect, useState } from 'react';
 import { columns } from '@/app/admin/departments/_reusable/columns';
 import { ColumnFiltersState, PaginationState } from '@tanstack/react-table';
 import { useSearchUsersQuery } from '@/hooks/api/user';
-import { useSearchDepartmentsQuery } from '@/hooks/api/department';
+import { useDeleteDepartmentMutation, useSearchDepartmentsQuery } from '@/hooks/api/department';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 
 export default function Page() {
-  const router = useRouter()
+  const router = useRouter();
+  const [selectedId, setSelectedId] = useState<number>();
+  const [showDialog, setShowDialog] = useState(false);
   const [paginationState, setPaginationState] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 5,
@@ -26,6 +36,12 @@ export default function Page() {
       }, {}),
     });
 
+  const [deleteDepartment, { isSuccess: deletedSuccess }] = useDeleteDepartmentMutation();
+  useEffect(() => {
+    if (deletedSuccess) {
+      toast.success('Đã xoá thành công');
+    }
+  }, [deletedSuccess]);
 
   return <>
     <div className="hidden flex-col md:flex">
@@ -33,30 +49,59 @@ export default function Page() {
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Phòng ban</h2>
         </div>
-        <Button onClick={()=> router.push('/admin/departments/create')}>Tạo phòng ban</Button>
-        <div className=" ">
-          <DataTable
-            tableOptions={{
-              rowCount: data?.totalElements,
-              pageCount: data?.totalPages,
-              onPaginationChange: setPaginationState,
-              onColumnFiltersChange: setFilterState,
-              state: {
-                columnFilters: filterState,
-                pagination: paginationState,
-              },
-            }}
-            onDelete={ids => {
-            }}
-            getIdFromRow={row => row.id}
-            filterCol="tenPhongBan"
-            columns={columns}
-            data={data?.content || []}
-          />
-
-        </div>
+        <Button onClick={() => router.push('/admin/departments/create')}>Tạo phòng ban</Button>
+        <DataTable
+          tableOptions={{
+            rowCount: data?.totalElements,
+            pageCount: data?.totalPages,
+            onPaginationChange: setPaginationState,
+            onColumnFiltersChange: setFilterState,
+            state: {
+              columnFilters: filterState,
+              pagination: paginationState,
+            },
+          }}
+          onDelete={ids => {
+          }}
+          getIdFromRow={row => row.id}
+          filterCol="tenPhongBan"
+          columns={columns({
+            onDelete: id => {
+              setSelectedId(id);
+              setShowDialog(true);
+            },
+            onDetail: id => {
+              router.push(`/admin/departments/${id}`);
+            },
+          })}
+          data={data?.content || []}
+        />
+        <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Bạn có chắc xoá?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Hành động này sẽ xoá dữ liệu và không thể khôi phục lại được.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogAction onClick={event => {
+                if (selectedId) {
+                  deleteDepartment({
+                    id: selectedId,
+                  });
+                  setSelectedId(undefined);
+                }
+              }}>
+                Xoá
+                </AlertDialogAction>
+              <AlertDialogCancel onClick={event => {
+                setSelectedId(undefined);
+              }}>Huỷ</AlertDialogCancel>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
-
     </div>
   </>;
 }

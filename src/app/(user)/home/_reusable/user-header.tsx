@@ -5,7 +5,7 @@ import { useMeQuery } from '@/hooks/api/auth';
 
 export default function UserHeader() {
   const router = useRouter();
-  const { data: me, error } = useMeQuery({});
+  const { data: me, error } = useMeQuery();
   return <>
     <div className="w-screen flex flex-row items-center justify-end">
       <h1>
