@@ -27,7 +27,7 @@ import {
 } from '@/components/ui/table';
 import { DataTablePagination } from './data-table-pagination';
 import { DataTableViewOptions } from './data-table-view-options';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DataTableDeleteButton from './data-table-delete';
 import DataTableAddButton, { AddButtonProps } from './data-table-add-button';
 import { Input } from '@/components/ui/input';
@@ -41,19 +41,19 @@ interface DataTableProps<TData, TValue, IdType> {
     TableOptions<TData>,
     'data' | 'columns' | 'getCoreRowModel'
   >;
-  selectable?:boolean;
+  selectable?: boolean;
   filterCol: string;
 }
 
 export function DataTable<TData, TValue, IdType>({
-  columns,
-  data,
-  getIdFromRow,
-  onDelete,
-  tableOptions,
-  filterCol,
-  selectable,
-}: DataTableProps<TData, TValue, IdType>) {
+                                                   columns,
+                                                   data,
+                                                   getIdFromRow,
+                                                   onDelete,
+                                                   tableOptions,
+                                                   filterCol,
+                                                   selectable,
+                                                 }: DataTableProps<TData, TValue, IdType>) {
   const [sort, setSort] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -77,18 +77,19 @@ export function DataTable<TData, TValue, IdType>({
     ...tableOptions,
   });
 
+
   return (
     <div>
-      <div className='flex items-center py-4'>
+      <div className="flex items-center py-4">
         <Input
-          placeholder='Filter...'
+          placeholder="Filter..."
           value={(table.getColumn(filterCol)?.getFilterValue() as string) ?? ''}
           onChange={(event) => {
             console.log(table.getColumn(filterCol));
             return table.getColumn(filterCol)?.setFilterValue(event.target.value);
+           }
           }
-          }
-          className='max-w-sm'
+          className="max-w-sm"
         />
 
         <DataTableDeleteButton
@@ -101,7 +102,7 @@ export function DataTable<TData, TValue, IdType>({
 
         <DataTableViewOptions table={table} />
       </div>
-      <div className='rounded-md border'>
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -112,9 +113,9 @@ export function DataTable<TData, TValue, IdType>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   );
                 })}
@@ -126,13 +127,13 @@ export function DataTable<TData, TValue, IdType>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && 'selected' }
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
@@ -142,7 +143,7 @@ export function DataTable<TData, TValue, IdType>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className='h-24 text-center'
+                  className="h-24 text-center"
                 >
                   Không có dữ liệu.
                 </TableCell>
@@ -151,7 +152,7 @@ export function DataTable<TData, TValue, IdType>({
           </TableBody>
         </Table>
       </div>
-      <div className='mt-4'>
+      <div className="mt-4">
         <DataTablePagination
           selectable={selectable}
           table={table} />

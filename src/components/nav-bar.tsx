@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { useMeQuery } from '@/hooks/api/auth';
 
 const routes = [
   {
@@ -30,6 +31,7 @@ const routes = [
 export default function NavBar() {
   const pathname = usePathname();
   const router = useRouter();
+  const {data: me, error} = useMeQuery({})
 
   return <>
     <div className="relative w-1/5  border-r h-full">
@@ -40,6 +42,7 @@ export default function NavBar() {
       </div>
       <div className="absolute bottom-2 w-full px-2">
         <Button className='w-full ' onClick={()=>{
+          localStorage.removeItem('access_token');
           router.push('/auth/login')
         }}>Đăng xuất</Button>
       </div>

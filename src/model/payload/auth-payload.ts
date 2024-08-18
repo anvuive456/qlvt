@@ -24,3 +24,19 @@ export interface SignInResponse {
 export interface SignUpResponse {
   message: string;
 }
+
+export interface MeResponse {
+  id: number;
+  email: string;
+  username: string;
+  soDienThoai: string;
+  ngaySinh: string;
+  tenDayDu: string;
+  coQuan: string;
+  gioiTinh: string;
+  image: string;
+  ghiChu: string;
+  phongBan: string;
+  roles: { id: string; ten: string; }[];
+
+}

@@ -41,7 +41,7 @@ export default function SignUpPage() {
       toast.error('Đăng ký không thành công', {
         position: 'top-right',
       });
-    } else {
+    } else if(result.data) {
       toast('Đăng ký thành công', {
         position: 'top-right',
       });

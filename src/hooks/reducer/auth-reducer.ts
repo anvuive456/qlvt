@@ -1,13 +1,16 @@
 import { User } from '@/model/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { authApi } from '@/hooks/api/auth';
 
-export type AuthContext = {
+export type AuthReducer = {
   isAuthenticated: boolean;
+  token: string;
   user?: User
 }
 
-const initialState: AuthContext = {
+const initialState: AuthReducer = {
   isAuthenticated: false,
+  token: ''
 };
 
 const authSlice = createSlice({
@@ -15,9 +18,10 @@ const authSlice = createSlice({
   name: 'authSlice',
   reducerPath: 'authSlice',
   reducers: {
-    setAuthState: (state, action: PayloadAction<AuthContext>) => {
+    setAuthState: (state, action: PayloadAction<AuthReducer>) => {
       state.isAuthenticated = action.payload.isAuthenticated;
       state.user = action.payload.user;
+      state.token = action.payload.token;
     },
   },
 });

@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { useSignInMutation } from '@/hooks/api/auth';
+import { useMeQuery, useSignInMutation } from '@/hooks/api/auth';
 import { useEffect } from 'react';
 
 const LoginSchema = z.object({
@@ -22,17 +22,30 @@ const LoginSchema = z.object({
 
 export default function LoginPage() {
   const [signIn, result] = useSignInMutation();
+  const me = useMeQuery({});
   const router = useRouter();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
   });
 
   useEffect(() => {
+    if (!me.error && me.data) {
+      const user = me.data;
+      if (user.roles.includes('ROLE_USER')) {
+        router.push('/home');
+      } else if (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_SUPER')) {
+        router.push('/admin');
+      } else {
+        toast.error(`Unimplemented role: ${user.roles}`);
+      }
+    }
+  }, [me]);
+  useEffect(() => {
     if (result.error) {
       toast.error('Đăng nhập không thành công', {
         id: 0,
       });
-    } else {
+    } else if (result.data) {
       const hehe = result.data;
       if (hehe?.accessToken) {
         localStorage.setItem('access_token', hehe.accessToken);
