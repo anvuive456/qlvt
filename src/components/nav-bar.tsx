@@ -17,8 +17,8 @@ const routes = [
     roles: ['ROLE_SUPER'],
   },
   {
-    path: '/admin/devices',
-    label: 'Thiết bị',
+    path: '/admin/properties',
+    label: 'Tài sản',
     roles: ['ROLE_ADMIN', 'ROLE_SUPER'],
   },
   {

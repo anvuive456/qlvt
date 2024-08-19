@@ -1,4 +1,9 @@
 import NavBar from '@/components/nav-bar';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
+export const metadata = {
+  title: 'Trang quản trị',
+};
 
 export default function Layout({
                                  children,
@@ -7,10 +12,10 @@ export default function Layout({
 }>) {
   return <>
     <div className=" flex-row h-screen w-full flex ">
-      <NavBar/>
-      <section className='p-4 w-4/5 '>
-         {children}
-       </section>
+      <NavBar />
+      <ScrollArea className="p-4 w-4/5 h-screen">
+        {children}
+      </ScrollArea>
     </div>
   </>;
 }

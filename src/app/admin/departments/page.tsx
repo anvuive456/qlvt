@@ -49,7 +49,7 @@ export default function Page() {
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">Phòng ban</h2>
         </div>
-        <Button onClick={() => router.push('/admin/departments/create')}>Tạo phòng ban</Button>
+        <Button onClick={() => router.push('/admin/departments/create')}>Thêm phòng ban</Button>
         <DataTable
           tableOptions={{
             rowCount: data?.totalElements,

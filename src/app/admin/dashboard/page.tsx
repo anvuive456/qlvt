@@ -1,14 +1,11 @@
-import { Metadata } from "next"
+'use client'
+
 import Image from "next/image"
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Overview } from '@/app/admin/dashboard/_reusable/overview';
 import { RecentSales } from '@/app/admin/dashboard/_reusable/recent-sale';
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Example dashboard app built using the components.",
-}
 
 export default function DashboardPage() {
   return (

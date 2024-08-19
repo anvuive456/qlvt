@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { columns, mockRooms, Room } from '@/app/admin/rooms/_reusable/columns';
 import { DataTable } from '@/components/table/data-table';
-import { Device, mockDevices } from '@/app/admin/devices/_reusable/columns';
+import { Device, mockDevices } from '@/app/admin/properties/_reusable/columns';
 
 export default function Page(){
   const [data,setData] = useState<Device[]>([]);

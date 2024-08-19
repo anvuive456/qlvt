@@ -1,11 +1,10 @@
 'use client';
+
+import { columns } from '@/app/admin/properties/_reusable/columns';
 import { useEffect, useState } from 'react';
 import { DataTable } from '@/components/table/data-table';
-import { columns } from '@/app/admin/rooms/_reusable/columns';
-import { useDeleteRoomMutation, useSearchRoomsQuery } from '@/hooks/api/room';
 import { useRouter } from 'next/navigation';
 import { ColumnFiltersState, PaginationState } from '@tanstack/react-table';
-import { useSearchUsersQuery } from '@/hooks/api/user';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel,
   AlertDialogContent,
@@ -14,6 +13,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
+import { useDeletePropertyMutation, useSearchPropertiesQuery } from '@/hooks/api/property';
 import { Button } from '@/components/ui/button';
 
 export default function Page() {
@@ -25,7 +25,7 @@ export default function Page() {
     pageSize: 5,
   });
   const [filterState, setFilterState] = useState<ColumnFiltersState>([]);
-  const { data } = useSearchRoomsQuery({
+  const { data } = useSearchPropertiesQuery({
     page: paginationState?.pageIndex || 0,
     size: paginationState.pageSize,
     ...filterState.reduce<{ [k: string]: string }>((acc, item) => {
@@ -34,7 +34,7 @@ export default function Page() {
     }, {}),
   });
 
-  const [deleteRoom, { isSuccess: deletedSuccess, isError: deletedError }] = useDeleteRoomMutation()
+  const [deleteProperty, { isSuccess: deletedSuccess, isError: deletedError }] = useDeletePropertyMutation();
 
   useEffect(() => {
     if (deletedSuccess) {
@@ -47,14 +47,13 @@ export default function Page() {
       toast.error(`Xoá không thành công`);
     }
   }, [deletedError]);
-
   return <>
     <div className="hidden flex-col md:flex">
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">Phòng họp</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Tài sản</h2>
         </div>
-        <Button onClick={() => router.push('/admin/rooms/create')}>Thêm phòng họp</Button>
+        <Button onClick={() => router.push('/admin/properties/create')}>Thêm tài sản</Button>
         <DataTable
           onDelete={ids => {
           }}
@@ -69,10 +68,10 @@ export default function Page() {
             },
           }}
           getIdFromRow={row => row.id}
-          filterCol="tenPhongHop"
+          filterCol="maTaiSan"
           columns={columns({
             onDetail: id => {
-              router.push(`/admin/rooms/${id}`);
+              router.push(`/admin/properties/${id}`);
             },
             onDelete: id => {
               setSelectedId(id);
@@ -90,7 +89,7 @@ export default function Page() {
             <AlertDialogFooter>
               <AlertDialogAction onClick={event => {
                 if (selectedId) {
-                  deleteRoom({
+                  deleteProperty({
                     id: selectedId,
                   });
                   setSelectedId(undefined);
