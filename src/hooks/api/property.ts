@@ -52,6 +52,7 @@ export const propertyApi = createApi({
           method: 'POST',
           body: arg,
         }),
+        invalidatesTags:['DEVICES']
       }),
       deleteProperty: build.mutation<void, { id: number }>({
         query: ({ id }) => ({
