@@ -5,6 +5,7 @@ import authReducer from '@/hooks/reducer/auth-reducer';
 import { departmentApi } from '@/hooks/api/department';
 import { roomApi } from '@/hooks/api/room';
 import { propertyApi } from '@/hooks/api/property';
+import { uploadApi } from '@/hooks/api/upload';
 
 export const makeStore = () => {
   return configureStore({
@@ -14,6 +15,7 @@ export const makeStore = () => {
       [departmentApi.reducerPath]: departmentApi.reducer,
       [roomApi.reducerPath]: roomApi.reducer,
       [propertyApi.reducerPath]: propertyApi.reducer,
+      [uploadApi.reducerPath]: uploadApi.reducer,
       auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -23,6 +25,7 @@ export const makeStore = () => {
         departmentApi.middleware,
         roomApi.middleware,
         propertyApi.middleware,
+        uploadApi.middleware,
       ]),
   });
 };

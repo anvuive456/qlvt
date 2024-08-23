@@ -12,7 +12,7 @@ export const authApi = createApi({
     baseUrl: 'http://localhost:8080/api/auth',
     headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` },
   }),
-  tagTypes: ['User'],
+  tagTypes: ['ME'],
   endpoints(build) {
     return {
       signUp: build.mutation<SignUpResponse, SignUpRequest>({
@@ -25,7 +25,7 @@ export const authApi = createApi({
             password: payload.password,
             ngaySinh: payload.dob,
             soDienThoai: payload.phone,
-            coQuan: payload.department,
+            coQuan: payload.org,
             tenDayDu: payload.fullName,
             gender: payload.gender,
             role: [payload.role],
@@ -38,7 +38,7 @@ export const authApi = createApi({
           method: 'POST',
           body: payload,
         }),
-        invalidatesTags: ['User'],
+        invalidatesTags: ['ME'],
         onQueryStarted: async (arg, api) => {
           const res = await api.queryFulfilled;
           const token = res.data.accessToken;
@@ -63,9 +63,7 @@ export const authApi = createApi({
             fullName: data.tenDayDu,
           };
         },
-        providesTags: result => {
-          return ['User'];
-        },
+        providesTags: ['ME'],
       }),
     };
   },

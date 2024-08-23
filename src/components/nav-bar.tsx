@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useMeQuery } from '@/hooks/api/auth';
+import { useEffect } from 'react';
 
 const routes = [
   {
@@ -31,14 +32,18 @@ const routes = [
     label: 'Phòng họp',
     roles: ['ROLE_ADMIN', 'ROLE_SUPER'],
   },
+  {
+    path: '/admin/tickets',
+    label: 'Phiếu mượn/trả',
+    roles: ['ROLE_ADMIN', 'ROLE_SUPER'],
+  },
 ];
 
 export default function NavBar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { data: me, error } = useMeQuery();
+  const { data: me, isError,refetch } = useMeQuery();
   const myRoles = me?.roles || [];
-
   return <>
     <div className="relative w-1/5  border-r h-full">
       <div className="flex flex-col ">
@@ -55,7 +60,7 @@ export default function NavBar() {
       <div className="absolute bottom-2 w-full px-2">
         <Button className="w-full " onClick={() => {
           localStorage.removeItem('access_token');
-          router.push('/auth/login');
+          router.replace('/auth/login');
         }}>Đăng xuất</Button>
       </div>
     </div>

@@ -28,6 +28,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from '@/lib/utils';
 import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getImageData } from '@/lib/get-image-data';
+import { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE } from '@/lib/file-constants';
 
 
 const FormSchema = z.object({
@@ -38,13 +41,21 @@ const FormSchema = z.object({
   coQuan: z.string(),
   tenDayDu: z.string(),
   gioiTinh: z.nativeEnum(Gender),
-  // image: z.string(),
+  image: z
+    .any()
+    .refine((files) => files?.length == 1, "Phải có ảnh.")
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, `Ảnh vượt quá 5MB.`)
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "Chỉ chấp nhận đụng dạng: .jpg, .jpeg, .png và .webp."
+    ),
   ghiChu: z.string(),
   idPhongBan: z.number(),
 });
 export default function Page() {
   const router = useRouter();
   const [showDialog, setShowDialog] = useState(false);
+  const [preview, setPreview] = useState('');
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -54,7 +65,8 @@ export default function Page() {
   const { data: allDepartments } = useGetAllDepartmentsQuery();
 
   useEffect(() => {
-    console.log(form.formState.errors)
+    console.log(form.formState.errors);
+    console.log(form.getValues('image'));
   }, [form.formState.errors]);
 
   useEffect(() => {
@@ -71,16 +83,59 @@ export default function Page() {
   }, [result]);
 
   const onSubmit = (values: z.infer<typeof FormSchema>) => {
-    createUser({
-      ...values,
-      ngaySinh: formatDate(values.ngaySinh, DateFormatTypes.DD_MM_YYYY),
-    });
+    let form = new FormData();
+    form.append('username', values.username);
+    form.append('email',values.email);
+    form.append('ngaySinh',formatDate(values.ngaySinh, DateFormatTypes.DD_MM_YYYY));
+    form.append('tenDayDu',values.tenDayDu);
+    form.append('gioiTinh',values.gioiTinh.toString());
+    form.append('ghiChu',values.ghiChu);
+    form.append('idPhongBan',values.idPhongBan.toString());
+    form.append('coQuan',values.coQuan);
+    form.append('image',values.image[0]);
+    form.append('soDienThoai',values.soDienThoai);
+    console.log(values.image[0]);
+
+    createUser(form);
   };
 
   return <>
     <h2 className="text-3xl font-bold mb-4">Thêm quản lý</h2>
     <Form  {...form}>
       <form id={'hook-form'} onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-1">
+        <FormField render={
+          ({ field: { onChange, value, ...rest } }) => (
+            <FormItem>
+              <FormLabel>Ảnh đại diện</FormLabel>
+              <FormControl>
+                <>
+                  <Avatar
+                    className='w-32 h-32'
+                  >
+                    <AvatarImage
+                      src={preview} />
+                    <AvatarFallback
+                    >
+                      VN
+                    </AvatarFallback>
+                  </Avatar>
+                  <Input placeholder={'Chọn hình đại diện'}
+                         type="file"
+                         {...rest}
+                         onChange={(event) => {
+                           const { files, displayUrl } = getImageData(event);
+                           setPreview(displayUrl);
+                           onChange(files);
+                         }}
+                  />
+                </>
+              </FormControl>
+              <FormMessage />
+
+            </FormItem>
+          )
+        } name="image" />
+
         <FormField render={
           ({ field }) => (
             <FormItem>
@@ -119,7 +174,7 @@ export default function Page() {
             <FormItem>
               <FormLabel>Số điện thoại</FormLabel>
               <FormControl>
-                <Input  placeholder={'Số điện thoại của bạn'} {...field} type={'tel'} />
+                <Input placeholder={'Số điện thoại của bạn'} {...field} type={'tel'} />
               </FormControl>
               <FormMessage />
 

@@ -66,9 +66,6 @@ export default function Page() {
               pagination: paginationState,
             },
           }}
-          onDelete={ids => {
-
-          }}
           getIdFromRow={row => row.id}
           filterCol="tenDayDu"
           columns={columns({

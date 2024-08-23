@@ -7,7 +7,7 @@ export interface SignUpRequest {
   email: string;
   dob: string;
   phone: string;
-  department: string;
+  org: string;
   fullName: string;
   gender: Gender;
   role: 'user' | 'admin';

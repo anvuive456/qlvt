@@ -17,6 +17,7 @@ import { CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const SignUpSchema = z.object({
   username: z.string(),
@@ -25,10 +26,11 @@ const SignUpSchema = z.object({
   password: z.string(),
   dob: z.date(),
   fullName: z.string(),
-  department: z.string(),
+  org: z.string(),
   gender: z.nativeEnum(Gender),
 });
 export default function SignUpPage() {
+  const router = useRouter()
   const form = useForm<z.infer<typeof SignUpSchema>>({
       resolver: zodResolver(SignUpSchema),
     },
@@ -41,12 +43,13 @@ export default function SignUpPage() {
       toast.error('Đăng ký không thành công', {
         position: 'top-right',
       });
-    } else if(result.data) {
+    } else if(result.isSuccess) {
       toast('Đăng ký thành công', {
         position: 'top-right',
       });
+      router.push('/auth/login');
     }
-  }, [result]);
+  }, [result,router]);
 
   const onSubmit = (values: z.infer<typeof SignUpSchema>) => {
     signUp({
@@ -57,7 +60,7 @@ export default function SignUpPage() {
       dob: formatDate(values.dob, DateFormatTypes.DD_MM_YYYY),
       fullName: values.fullName,
       role: 'user',
-      department: values.department,
+      org: values.org,
       gender: values.gender,
     });
 

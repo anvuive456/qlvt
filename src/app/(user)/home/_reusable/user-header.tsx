@@ -2,10 +2,16 @@
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useMeQuery } from '@/hooks/api/auth';
+import { useEffect } from 'react';
 
 export default function UserHeader() {
   const router = useRouter();
-  const { data: me, error } = useMeQuery();
+  const { data: me, error,isError,refetch } = useMeQuery();
+  useEffect(() => {
+    if(isError) {
+      router.push('/auth/login');
+    }
+  }, [isError,router]);
   return <>
     <div className="w-screen flex flex-row items-center justify-end">
       <h1>
@@ -16,7 +22,7 @@ export default function UserHeader() {
       </h1>
       <Button className="m-10" onClick={() => {
         localStorage.removeItem('access_token');
-        router.push('/auth/login');
+        refetch();
       }}>Đăng xuất</Button>
     </div>
   </>;

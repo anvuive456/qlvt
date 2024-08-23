@@ -56,8 +56,7 @@ export default function Page() {
         </div>
         <Button onClick={() => router.push('/admin/rooms/create')}>Thêm phòng họp</Button>
         <DataTable
-          onDelete={ids => {
-          }}
+
           tableOptions={{
             rowCount: data?.totalElements,
             pageCount: data?.totalPages,

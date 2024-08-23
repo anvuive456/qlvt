@@ -61,8 +61,7 @@ export default function Page() {
               pagination: paginationState,
             },
           }}
-          onDelete={ids => {
-          }}
+
           getIdFromRow={row => row.id}
           filterCol="tenPhongBan"
           columns={columns({

@@ -35,7 +35,6 @@ import { Input } from '@/components/ui/input';
 interface DataTableProps<TData, TValue, IdType> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onDelete: (ids: IdType[]) => void;
   getIdFromRow: (row: TData) => IdType;
   tableOptions?: Omit<
     TableOptions<TData>,
@@ -49,7 +48,6 @@ export function DataTable<TData, TValue, IdType>({
                                                    columns,
                                                    data,
                                                    getIdFromRow,
-                                                   onDelete,
                                                    tableOptions,
                                                    filterCol,
                                                    selectable,
@@ -92,11 +90,11 @@ export function DataTable<TData, TValue, IdType>({
           className="max-w-sm"
         />
 
-        <DataTableDeleteButton
-          table={table}
-          onDelete={onDelete}
-          getIdFromRow={getIdFromRow}
-        />
+        {/*<DataTableDeleteButton*/}
+        {/*  table={table}*/}
+        {/*  onDelete={onDelete}*/}
+        {/*  getIdFromRow={getIdFromRow}*/}
+        {/*/>*/}
 
         {/*<DataTableAddButton {...addButtonProps} />*/}
 

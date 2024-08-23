@@ -8,7 +8,7 @@ export type CreateUserRequest = {
   coQuan: string,
   tenDayDu: string,
   gioiTinh: Gender,
-  // image: string,
+  image: FileList,
   ghiChu: string,
   idPhongBan: number
 }

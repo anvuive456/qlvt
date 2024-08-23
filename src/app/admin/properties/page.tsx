@@ -55,8 +55,7 @@ export default function Page() {
         </div>
         <Button onClick={() => router.push('/admin/properties/create')}>Thêm tài sản</Button>
         <DataTable
-          onDelete={ids => {
-          }}
+
           tableOptions={{
             rowCount: data?.totalElements,
             pageCount: data?.totalPages,

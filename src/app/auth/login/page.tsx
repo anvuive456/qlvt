@@ -29,7 +29,7 @@ export default function LoginPage() {
   });
 
   useEffect(() => {
-    if (!me.error && me.data) {
+    if (!me.isError && me.data) {
       const user = me.data;
       if (user.roles.includes('ROLE_USER')) {
         router.push('/home');
