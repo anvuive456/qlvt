@@ -16,9 +16,10 @@ export const roomApi = createApi({
         tenPhongHop?: string;
         page: number;
         size: number;
+        status?: string;
       }>({
         query: arg => ({
-          url: `/search?tenPhongHop=${arg.tenPhongHop || ''}&page=${arg.page}&size=${arg.size}`,
+          url: `/search?tenPhongHop=${arg.tenPhongHop || ''}&page=${arg.page}&size=${arg.size}&trangThai=${arg.status || ''}`,
         }),
         providesTags: ['ROOMS'],
       }),

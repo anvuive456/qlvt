@@ -21,7 +21,8 @@ export const columns = ({
   {
     accessorKey: 'id',
 
-  }, {
+  },
+  {
     accessorKey: 'tenPhongHop',
     header: 'Tên',
   },

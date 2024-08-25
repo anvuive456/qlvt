@@ -22,26 +22,13 @@ const LoginSchema = z.object({
 
 export default function LoginPage() {
   const [signIn, result] = useSignInMutation();
-  const me = useMeQuery();
   const router = useRouter();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
   });
 
   useEffect(() => {
-    if (!me.isError && me.data) {
-      const user = me.data;
-      if (user.roles.includes('ROLE_USER')) {
-        router.push('/home');
-      } else if (user.roles.includes('ROLE_ADMIN') || user.roles.includes('ROLE_SUPER')) {
-        router.push('/admin');
-      } else {
-        toast.error(`Unimplemented role: ${user.roles}`);
-      }
-    }
-  }, [me]);
-  useEffect(() => {
-    if (result.error) {
+    if (result.isError) {
       toast.error('Đăng nhập không thành công', {
         id: 0,
       });
@@ -50,6 +37,18 @@ export default function LoginPage() {
       if (hehe?.accessToken) {
         localStorage.setItem('access_token', hehe.accessToken);
       }
+      setTimeout(()=>{
+
+        if (hehe.roles.includes('ROLE_USER')) {
+          router.push('/home');
+        } else if (hehe.roles.includes('ROLE_ADMIN') || hehe.roles.includes('ROLE_SUPER')) {
+          router.push('/admin');
+        } else {
+          toast.error(`Unimplemented role: ${hehe.roles}`);
+        }
+      },500);
+
+
       toast('Đăng nhập thành công', {
         id: 1,
       });

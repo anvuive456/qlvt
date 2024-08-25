@@ -20,6 +20,7 @@ export interface SignInRequest {
 
 export interface SignInResponse {
   accessToken: string;
+  roles: string[];
 }
 
 export interface SignUpResponse {

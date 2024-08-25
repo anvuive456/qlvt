@@ -38,15 +38,12 @@ export default function SignUpPage() {
 
   const [signUp, result] = useSignUpMutation();
 
+
   useEffect(() => {
     if (result.error) {
-      toast.error('Đăng ký không thành công', {
-        position: 'top-right',
-      });
+      toast.error('Đăng ký không thành công');
     } else if(result.isSuccess) {
-      toast('Đăng ký thành công', {
-        position: 'top-right',
-      });
+      toast('Đăng ký thành công');
       router.push('/auth/login');
     }
   }, [result,router]);
@@ -70,7 +67,7 @@ export default function SignUpPage() {
   return <>
     <h2 className="text-3xl font-bold mb-4">Đăng ký</h2>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
+      <form id='signup-form' onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-2">
         <FormField render={
           ({ field }) => (
             <FormItem>
@@ -133,13 +130,13 @@ export default function SignUpPage() {
         } name="password" />
         <FormField render={
           ({ field }) => (<FormItem>
-            <FormLabel>Phòng ban</FormLabel>
+            <FormLabel>Cơ quan</FormLabel>
             <FormControl>
-              <Input placeholder={'Siêu phẩm phòng ban'} {...field} />
+              <Input placeholder={'Tên cơ quan'} {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>)
-        } name="department" />
+        } name="org" />
         <FormField
           render={
             ({ field }) => (
@@ -208,7 +205,7 @@ export default function SignUpPage() {
             </FormItem>
           )}
         />
-        <Button type="submit" className=" text-white w-full mb-4 mt-4">Đăng ký</Button>
+        <Button form='signup-form' type="submit" className=" text-white w-full mb-4 mt-4">Đăng ký</Button>
         <div className="w-full flex flex-row items-center">
           <Link className="text-center w-full" href="/auth/login">Đăng nhập</Link>
         </div>

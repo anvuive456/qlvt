@@ -22,12 +22,12 @@ export const propertyApi = createApi({
         page: number;
         size: number;
         maTaiSan?: string;
-        status?: PropertyStatus;
-        condition?: PropertyCondition;
+        status?: string;
+        condition?: string;
       }>({
         query: arg => {
           return {
-            url: `/search?page=${arg.page}&size=${arg.size}&maTaiSan=${arg.maTaiSan || ''}&trangThai=${arg.status || ''}&tinhTrang=${arg.condition || ''}`,
+            url: `/search?page=${arg.page}&size=${arg.size}&maTaiSan=${arg.maTaiSan ?? ''}&trangThai=${arg.status || ''}&tinhTrang=${arg.condition || ''}`,
           };
         },
         providesTags: ['DEVICES'],
@@ -44,7 +44,7 @@ export const propertyApi = createApi({
           method: 'PUT',
           body: arg,
         }),
-        invalidatesTags:['DEVICES']
+        invalidatesTags: ['DEVICES'],
       }),
       createProperty: build.mutation<void, CreatePropertyRequest>({
         query: arg => ({
@@ -52,14 +52,15 @@ export const propertyApi = createApi({
           method: 'POST',
           body: arg,
         }),
-        invalidatesTags:['DEVICES']
+        invalidatesTags: ['DEVICES'],
       }),
+
       deleteProperty: build.mutation<void, { id: number }>({
         query: ({ id }) => ({
           url: `/${id}`,
           method: 'DELETE',
         }),
-        invalidatesTags:['DEVICES']
+        invalidatesTags: ['DEVICES'],
       }),
     };
   },

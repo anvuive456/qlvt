@@ -67,7 +67,14 @@ export default function Page() {
             },
           }}
           getIdFromRow={row => row.id}
-          filterCol="tenDayDu"
+          onSearch={search => {
+            setFilterState([
+              {
+                id: 'tenDayDu',
+                value: search,
+              },
+            ]);
+          }}
           columns={columns({
             onDetail: id => {
               router.push(`/admin/users/${id}`);

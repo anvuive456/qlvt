@@ -6,6 +6,8 @@ import { departmentApi } from '@/hooks/api/department';
 import { roomApi } from '@/hooks/api/room';
 import { propertyApi } from '@/hooks/api/property';
 import { uploadApi } from '@/hooks/api/upload';
+import { slipApi } from '@/hooks/api/slip';
+import { returnSlipApi } from '@/hooks/api/return-slip';
 
 export const makeStore = () => {
   return configureStore({
@@ -16,6 +18,8 @@ export const makeStore = () => {
       [roomApi.reducerPath]: roomApi.reducer,
       [propertyApi.reducerPath]: propertyApi.reducer,
       [uploadApi.reducerPath]: uploadApi.reducer,
+      [slipApi.reducerPath]: slipApi.reducer,
+      [returnSlipApi.reducerPath]: returnSlipApi.reducer,
       auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -26,6 +30,8 @@ export const makeStore = () => {
         roomApi.middleware,
         propertyApi.middleware,
         uploadApi.middleware,
+        slipApi.middleware,
+        returnSlipApi.middleware,
       ]),
   });
 };

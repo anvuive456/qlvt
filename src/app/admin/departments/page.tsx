@@ -63,7 +63,12 @@ export default function Page() {
           }}
 
           getIdFromRow={row => row.id}
-          filterCol="tenPhongBan"
+          onSearch={search => {
+            setFilterState([{
+              id: 'tenPhongBan',
+              value: search,
+            }]);
+          }}
           columns={columns({
             onDelete: id => {
               setSelectedId(id);
@@ -93,7 +98,7 @@ export default function Page() {
                 }
               }}>
                 Xoá
-                </AlertDialogAction>
+              </AlertDialogAction>
               <AlertDialogCancel onClick={event => {
                 setSelectedId(undefined);
               }}>Huỷ</AlertDialogCancel>

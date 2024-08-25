@@ -15,7 +15,7 @@ export type UpdatePropertyRequest =
   Omit<PropertyResponse, 'trangThai' | 'image' | 'createdBy' | 'updatedBy' | 'tinhTrang' | 'loaiTaiSan'>
   & {
   trangThai: 0 | 1;
-  tinhTrang: 0 | 1;
+  tinhTrang: 0 | 1 | 2;
   loaiTaiSan: 0 | 1;
 }
 export type CreatePropertyRequest = Omit<UpdatePropertyRequest, 'id'>
@@ -28,6 +28,7 @@ export enum PropertyType {
 export enum PropertyStatus {
   AVAILABLE = 'KHONG',
   UNAVAILABLE = 'DANG_MUON',
+  PENDING = 'DANG_CHO_DUYET_MUON',
 }
 
 export enum PropertyCondition {
@@ -41,6 +42,7 @@ export const PropertyEnumRequest = {
   [PropertyType.TOOL]: 1,
   [PropertyStatus.AVAILABLE]: 0,
   [PropertyStatus.UNAVAILABLE]: 1,
+  [PropertyStatus.PENDING]: 2,
   [PropertyCondition.NORMAL]: 0,
   [PropertyCondition.BROKEN]: 1,
 } as const;

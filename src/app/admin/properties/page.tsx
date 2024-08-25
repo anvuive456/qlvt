@@ -67,7 +67,14 @@ export default function Page() {
             },
           }}
           getIdFromRow={row => row.id}
-          filterCol="maTaiSan"
+          onSearch={search => {
+            setFilterState([
+              {
+                id: 'maTaiSan',
+                value: search,
+              },
+            ]);
+          }}
           columns={columns({
             onDetail: id => {
               router.push(`/admin/properties/${id}`);

@@ -16,13 +16,15 @@ export default function UserHeader() {
     <div className="w-screen flex flex-row items-center justify-end">
       <h1>
         Xin chào,
-        <span className="font-bold">
+        <span className="font-bold hover:underline">
         {me?.fullName}
         </span>
       </h1>
       <Button className="m-10" onClick={() => {
         localStorage.removeItem('access_token');
-        refetch();
+        setTimeout(()=>{
+          router.push('/auth/login');
+        },500)
       }}>Đăng xuất</Button>
     </div>
   </>;

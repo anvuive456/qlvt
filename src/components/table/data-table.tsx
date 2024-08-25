@@ -41,7 +41,8 @@ interface DataTableProps<TData, TValue, IdType> {
     'data' | 'columns' | 'getCoreRowModel'
   >;
   selectable?: boolean;
-  filterCol: string;
+  onSearch: (search: string) => void;
+
 }
 
 export function DataTable<TData, TValue, IdType>({
@@ -49,8 +50,8 @@ export function DataTable<TData, TValue, IdType>({
                                                    data,
                                                    getIdFromRow,
                                                    tableOptions,
-                                                   filterCol,
                                                    selectable,
+                                                   onSearch,
                                                  }: DataTableProps<TData, TValue, IdType>) {
   const [sort, setSort] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -81,11 +82,10 @@ export function DataTable<TData, TValue, IdType>({
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter..."
-          value={(table.getColumn(filterCol)?.getFilterValue() as string) ?? ''}
+          // value={(table.getColumn(filterCol)?.getFilterValue() as string) ?? ''}
           onChange={(event) => {
-            console.log(table.getColumn(filterCol));
-            return table.getColumn(filterCol)?.setFilterValue(event.target.value);
-           }
+            onSearch(event.target.value);
+            }
           }
           className="max-w-sm"
         />

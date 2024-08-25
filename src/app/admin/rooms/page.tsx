@@ -34,7 +34,7 @@ export default function Page() {
     }, {}),
   });
 
-  const [deleteRoom, { isSuccess: deletedSuccess, isError: deletedError }] = useDeleteRoomMutation()
+  const [deleteRoom, { isSuccess: deletedSuccess, isError: deletedError }] = useDeleteRoomMutation();
 
   useEffect(() => {
     if (deletedSuccess) {
@@ -68,7 +68,14 @@ export default function Page() {
             },
           }}
           getIdFromRow={row => row.id}
-          filterCol="tenPhongHop"
+          onSearch={search => {
+            setFilterState([
+              {
+                id: 'tenPhongHop',
+                value: search,
+              },
+            ]);
+          }}
           columns={columns({
             onDetail: id => {
               router.push(`/admin/rooms/${id}`);
