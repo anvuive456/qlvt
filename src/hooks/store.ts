@@ -8,6 +8,7 @@ import { propertyApi } from '@/hooks/api/property';
 import { uploadApi } from '@/hooks/api/upload';
 import { slipApi } from '@/hooks/api/slip';
 import { returnSlipApi } from '@/hooks/api/return-slip';
+import { dashboardApi } from '@/hooks/api/dashboard';
 
 export const makeStore = () => {
   return configureStore({
@@ -20,6 +21,7 @@ export const makeStore = () => {
       [uploadApi.reducerPath]: uploadApi.reducer,
       [slipApi.reducerPath]: slipApi.reducer,
       [returnSlipApi.reducerPath]: returnSlipApi.reducer,
+      [dashboardApi.reducerPath]: dashboardApi.reducer,
       auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
@@ -32,6 +34,7 @@ export const makeStore = () => {
         uploadApi.middleware,
         slipApi.middleware,
         returnSlipApi.middleware,
+        dashboardApi.middleware,
       ]),
   });
 };
